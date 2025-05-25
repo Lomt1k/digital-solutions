@@ -1,7 +1,11 @@
+import { ItemsSection } from "./components/ItemsSection";
+
 function App() {
   return (
     <>
-      APP
+      <main>
+        <ItemsSection />
+      </main>
     </>
   )
 }

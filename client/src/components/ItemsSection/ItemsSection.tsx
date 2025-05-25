@@ -2,13 +2,20 @@ import './ItemsSection.scss';
 import { Container } from '..';
 import { observer } from 'mobx-react-lite';
 import { RootStore } from '../../store';
-import { useItemsPage } from '../../hooks';
-import { useEffect } from 'react';
+import { useCallbackOnScroll, useItemsPage } from '../../hooks';
+import { useCallback, useEffect } from 'react';
+import ItemCardList from './ItemCardList';
 
 const ItemsSection = observer(() => {
-  const { page, filterSearch } = RootStore.items;
+  const { page, filterSearch, isPageLoaded } = RootStore.items;
   const { data, isFetching, isError } = useItemsPage(filterSearch, page);
   useEffect(() => RootStore.items.setItems(data), [data]);
+
+  const handleScrollToBottomPage = useCallback(() => {
+    if (!isPageLoaded) return;
+    RootStore.items.setPage(page + 1);
+  }, [isPageLoaded]);
+  useCallbackOnScroll(80, handleScrollToBottomPage, [handleScrollToBottomPage]);
 
   return (
     <section className="items-section">
@@ -17,11 +24,9 @@ const ItemsSection = observer(() => {
           <div className="item-section__filters">
             FILTERS
           </div>
-          {data && data.map(e => (
-            <div key={e.value}>
-              {e.value}
-            </div>
-          ))}
+          <ItemCardList />
+          {isFetching && <span>Загрузка...</span>}
+          {isError && <span>При загрузке данных произошла ошибка&nbsp;🙄</span>}
         </div>
       </Container>
     </section>

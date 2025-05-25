@@ -13,8 +13,9 @@ export class ItemsStore {
 
   setItems(items: Item[] | undefined) {
     items ??= [];
-    this.items = this.page > 1 ? [...this.items, ...items] : items;
     this.isPageLoaded = !!items;
+    if (this.page > 1) this.items.push(...items)
+    else this.items = items;
   }
 
   setFilterSearch(search: string) {

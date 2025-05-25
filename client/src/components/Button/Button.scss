@@ -1,0 +1,23 @@
+.button {
+  display: block;
+  font-family: var(--ff-main);
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: var(--color-navy-blue);
+  color: var(--color-white);
+  font-size: 16px;
+  line-height: 24px;
+  border: none;
+  outline: none;
+  transition: background-color var(--transition-200);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--color-green);
+  }
+
+  &:disabled {
+    background-color: var(--color-disabled);
+  }
+}

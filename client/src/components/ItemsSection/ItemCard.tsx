@@ -6,12 +6,12 @@ type ItemCardProps = {
   item: Item,
 }
 
-const ItemCard: FC<ItemCardProps> = memo(({ item }) => {
+const ItemCard: FC<ItemCardProps> = ({ item }) => {
   return (
     <div className="item-card">
       {item.value.toLocaleString()}
     </div>
   )
-})
+}
 
-export default ItemCard;
+export default memo(ItemCard);

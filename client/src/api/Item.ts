@@ -27,6 +27,10 @@ export const fetchDeselectItem = async (value: number): Promise<Item> => {
   return ItemSchema.parse(response.data);
 }
 
+export const fetchToggleItem = async (value: number, state: boolean): Promise<Item> => {
+  return state ? fetchSelectItem(value) : fetchDeselectItem(value);
+}
+
 export const fetchSortItems = async (descending: boolean): Promise<void> => {
   await api.post('/items/sort', { descending });
 }

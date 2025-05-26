@@ -1,5 +1,6 @@
-import { memo, type FC } from 'react';
-import type { Item } from '../../api/Item';
+import { memo, useState, type ChangeEventHandler, type FC } from 'react';
+import { fetchToggleItem, type Item } from '../../api/Item';
+import { useMutation } from '@tanstack/react-query';
 import './ItemCard.scss';
 
 type ItemCardProps = {
@@ -7,9 +8,29 @@ type ItemCardProps = {
 }
 
 const ItemCard: FC<ItemCardProps> = ({ item }) => {
+  const [checked, setChecked] = useState<boolean>(item.selected);
+
+  const mutation = useMutation({
+    mutationKey: ['items', 'selection', item.value],
+    mutationFn: ({ value, state }: { value: number, state: boolean }) => fetchToggleItem(value, state),
+    onError() {
+      setChecked((prev) => !prev);
+    }
+  });
+
+  const handleSelectionChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (mutation.isPending) return;
+    const newState = e.target.checked;
+    mutation.mutate({ value: item.value, state: newState });
+    setChecked(newState);
+  }
+
   return (
-    <div className="item-card">
-      {item.value.toLocaleString()}
+    <div className='item-card'>
+      <input type='checkbox' onChange={handleSelectionChange} checked={checked} />
+      <span>{item.value.toLocaleString()}</span>
+      {/* Своеобразное уведомление об ошибке */}
+      {mutation.isError && <span>⚠️</span>}
     </div>
   )
 }

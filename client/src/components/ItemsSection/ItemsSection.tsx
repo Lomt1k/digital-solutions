@@ -16,8 +16,8 @@ const ItemsSection = observer(() => {
   const handleScrollToBottomPage = useCallback(() => {
     if (!isPageLoaded) return;
     RootStore.items.setPage(page + 1);
-  }, [isPageLoaded]);
-  useCallbackOnScroll(80, handleScrollToBottomPage, [handleScrollToBottomPage]);
+  }, [isPageLoaded, page]);
+  useCallbackOnScroll(80, handleScrollToBottomPage);
 
   return (
     <section className="items-section">

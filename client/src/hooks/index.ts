@@ -1,2 +1,3 @@
 export { useItemsPage } from './useItemsPage';
-export { default as useCallbackOnScroll } from './useCallbackOnScroll';
+export { useCallbackOnScroll } from './useCallbackOnScroll';
+export { useItems } from './useItems';

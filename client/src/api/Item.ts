@@ -35,6 +35,6 @@ export const fetchSortItems = async (descending: boolean): Promise<void> => {
   await api.post('/items/sort', { descending });
 }
 
-export const fetchMoveItem = async (indexFrom: number, indexTo: number): Promise<void> => {
-  await api.post('/items/move', { indexFrom, indexTo });
+export const fetchMoveItem = async (value: number, placeAfter: number): Promise<void> => {
+  await api.post('/items/move', { value, placeAfter });
 }

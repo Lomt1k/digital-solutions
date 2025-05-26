@@ -1,6 +1,6 @@
 import { useEffect, type DependencyList } from "react";
 
-const useCallbackOnScroll = (targetPercent: number, callback: () => void, dep?: DependencyList) => {
+export const useCallbackOnScroll = (targetPercent: number, callback: () => void, dep?: DependencyList) => {
   useEffect(() => {
     const handleScrollChange = () => {
       const progress = window.pageYOffset + window.innerHeight;
@@ -13,5 +13,3 @@ const useCallbackOnScroll = (targetPercent: number, callback: () => void, dep?: 
     return () => window.removeEventListener('scroll', handleScrollChange);
   }, dep);
 }
-
-export default useCallbackOnScroll;

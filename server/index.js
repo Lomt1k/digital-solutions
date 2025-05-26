@@ -13,7 +13,7 @@ const PAGE_SIZE = 20;
 const DB = {};
 DB.items = new Array(1_000_000);
 for (let i = 0; i < DB.items.length; i++) {
-  DB.items[i] = { 
+  DB.items[i] = {
     value: i + 1,
     selected: false,
   }
@@ -64,18 +64,19 @@ app.post('/api/items/sort', (req, res) => {
 
 app.post('/api/items/move', (req, res) => {
   if (!req.body) return res.sendStatus(400);
-  const { indexFrom, indexTo } = req.body;
-  if (
-    indexFrom === indexTo ||
-    typeof indexFrom !== 'number' || typeof indexTo !== 'number' ||
-    indexFrom < 0 || indexTo >= DB.items.length ||
-    indexTo < 0 || indexTo >= DB.items.length
-  ) return res.sendStatus(400);
+  const { value, placeAfter } = req.body;
+  if (value === placeAfter) return res.sendStatus(400);
 
-  const addIndex = indexTo < indexFrom ? indexTo : indexTo + 1;
-  const deleteIndex = indexFrom < indexTo ? indexFrom : indexFrom + 1;
-  DB.items.splice(addIndex, 0, DB.items[indexFrom]);
-  DB.items.splice(deleteIndex, 1);
+  // Клиент не может прислать готовые индексы, т.к. у него может быть отфильтрованный поиском массив
+  // а мы хотим чтобы Drag N Drop менял порядок в полном списке, а не фильтрованном
+  // Это сомнительно для реального проекта, но как я понял по ТЗ - нужно было именно такое поведение
+  const indexFrom = DB.items.findIndex((e) => e.value === value);
+  const indexTo = DB.items.findIndex((e) => e.value === placeAfter);
+  if (indexTo === -1 || indexTo === -1) return res.sendStatus(400);
+
+  const [movedItem] = DB.items.splice(indexFrom, 1);
+  DB.items.splice(indexTo, 0, movedItem);
+
   res.sendStatus(204);
 });
 

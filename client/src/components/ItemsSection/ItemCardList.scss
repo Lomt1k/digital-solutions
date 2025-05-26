@@ -5,4 +5,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  &__item {
+    cursor: grab;
+
+    &[draggable]:active {
+      cursor: grabbing;
+    }
+  }
 }

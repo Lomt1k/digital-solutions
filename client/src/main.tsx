@@ -5,13 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'normalize.css';
 import './styles/main.scss';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

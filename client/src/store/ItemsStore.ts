@@ -12,20 +12,19 @@ export class ItemsStore {
   }
 
   setItems(items: Item[] | undefined) {
-    items ??= [];
     this.isPageLoaded = !!items;
+    items ??= [];
     if (this.page > 1) this.items.push(...items)
     else this.items = items;
   }
 
   setFilterSearch(search: string) {
     this.filterSearch = search.toLowerCase();
-    this.page = 1;
-    this.isPageLoaded = false;
   }
 
   setPage(page: number) {
     this.page = page;
     this.isPageLoaded = false;
+    if (page === 1) this.setItems(undefined);
   }
 }

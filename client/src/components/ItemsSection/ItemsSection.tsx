@@ -2,16 +2,27 @@ import './ItemsSection.scss';
 import { Container } from '..';
 import { observer } from 'mobx-react-lite';
 import { RootStore } from '../../store';
-import { useCallbackOnScroll, useItemsPage } from '../../hooks';
-import { useCallback, useEffect } from 'react';
+import { useCallbackOnScroll } from '../../hooks';
+import { useCallback, useEffect, useState } from 'react';
 import ItemCardList from './ItemCardList';
 import ItemsSearch from './ItemsSearch';
 import SortButton from './SortButton';
+import { fetchItems } from '../../api/Item';
 
 const ItemsSection = observer(() => {
   const { page, filterSearch, isPageLoaded } = RootStore.items;
-  const { data, isFetching, isError } = useItemsPage(filterSearch, page);
-  useEffect(() => RootStore.items.setItems(data), [data]);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isPageLoaded) return;
+    setIsFetching(true);
+    setIsError(false);
+    fetchItems(filterSearch, page)
+      .then((items) => RootStore.items.setItems(items))
+      .catch(() => setIsError(true))
+      .finally(() => setIsFetching(false))
+  }, [page, filterSearch, isPageLoaded]);
 
   const handleScrollToBottomPage = useCallback(() => {
     if (!isPageLoaded) return;

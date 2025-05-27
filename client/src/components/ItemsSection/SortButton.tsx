@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { type FC, memo } from "react";
 import { fetchSortItems } from "../../api/Item";
 import { Button } from "..";
@@ -9,19 +9,16 @@ type SortButtonProps = {
 }
 
 const SortButton: FC<SortButtonProps> = ({ descending = false }) => {
-  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationKey: ['sort', descending],
+    mutationKey: ['sort'],
     mutationFn: fetchSortItems,
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['items'] })
+      RootStore.items.setPage(1);
     }
   });
 
   const handleClick = () => {
-    RootStore.items.setItems(undefined);
-    RootStore.items.setPage(1);
-    mutation.mutate(descending)
+    mutation.mutate(descending);
   }
 
   return (
